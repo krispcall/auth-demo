@@ -9,9 +9,6 @@ from starlette.authentication import (
 )
 from starlette.authentication import requires
 
-import base64
-import binascii
-
 SECRET = 'adfjkasdfkhjsdf123kjh1ljkhkhdkjsd'
 
 class BasicAuthBackend(AuthenticationBackend):
@@ -22,14 +19,12 @@ class BasicAuthBackend(AuthenticationBackend):
         auth = conn.headers["Authorization"]
         scheme, token = auth.split()
         token = token.strip()
-
-        # try:
         # Decoding JWT.
         decoded_token = jwt.decode(token, SECRET, algorithms=['HS256'])
-        payload = decoded_token.get('id') # retrieve user id from payload.
-        return AuthCredentials(["authenticated"]), payload
-        # except Exception:
-        #     return Exception("skjdfhaskdfj")
+        id = decoded_token.get('id') # retrieve user id from payload.
+        user = get_user_details(id)
+        return AuthCredentials(["authenticated"]), SimpleUser(user)
+
 
 
 async def register(request:Request):
@@ -40,10 +35,10 @@ async def register(request:Request):
     new_user = create_user(username, email, password)
     return JSONResponse({"mesage": "User created.", "id": new_user.id}, status_code=201)
 
-@requires('authenticated')
+# @requires('authenticated')
 async def login(request:Request):
     if request.user.is_authenticated:
-        print(f"From Login URL: {request.user}")
+        print(f"From Login URL: {request.user.display_name}")
     else:
         print("Not Authenticated")
     body = await request.json()
@@ -57,3 +52,11 @@ async def login(request:Request):
             return JSONResponse({'token': token})
     return JSONResponse({'user': 'Invalid Credentials.'})
     
+
+# @requires('authenticated')
+async def getUserDetails(request:Request):
+    id = request.path_params
+    print("iiiiiiiiiiddddddddddddddddddddddddddddddddddddddd")
+    print(id)
+    user = get_user_details(id)
+    return JSONResponse({"id": user.id,"username": user.username, "email": user.email})

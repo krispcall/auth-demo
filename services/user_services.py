@@ -14,3 +14,7 @@ def create_user(username, email, password):
 def loginUser (username, password):
     user = session.query(User).filter(User.username==username).first()
     return user
+
+def get_user_details(id):
+    user:User = session.query(User).filter(User.id==10).first()
+    return user

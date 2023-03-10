@@ -4,4 +4,5 @@ from controllers.user_controllers import *
 user_routes = [
     Route('/register', register, methods=['POST']),
     Route('/login', login, methods=['POST']),
+    Route('/{id:int}', getUserDetails, methods=['GET']),
 ]
