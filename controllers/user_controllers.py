@@ -17,6 +17,7 @@ class BasicAuthBackend(AuthenticationBackend):
             print("No auth header!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             return
         auth = conn.headers["Authorization"]
+        # Splitting the JWT from Auth Header.
         scheme, token = auth.split()
         token = token.strip()
         # Decoding JWT.
@@ -24,8 +25,6 @@ class BasicAuthBackend(AuthenticationBackend):
         id = decoded_token.get('id') # retrieve user id from payload.
         user = get_user_details(id)
         return AuthCredentials(["authenticated"]), SimpleUser(user)
-
-
 
 async def register(request:Request):
     body = await request.json()
@@ -37,26 +36,20 @@ async def register(request:Request):
 
 # @requires('authenticated')
 async def login(request:Request):
-    if request.user.is_authenticated:
-        print(f"From Login URL: {request.user.display_name}")
-    else:
-        print("Not Authenticated")
     body = await request.json()
     username = body['username']
     password = body['password']
     log = loginUser(username, password)
     if log:
         if bcrypt.checkpw(password.encode('utf-8'), log.password.encode('utf-8')):
-            payload = {'id': log.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}
+            payload = {'id': log.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)}
             token = jwt.encode(payload, SECRET, algorithm='HS256')
             return JSONResponse({'token': token})
     return JSONResponse({'user': 'Invalid Credentials.'})
     
 
-# @requires('authenticated')
+@requires('authenticated')
 async def getUserDetails(request:Request):
     id = request.path_params
-    print("iiiiiiiiiiddddddddddddddddddddddddddddddddddddddd")
-    print(id)
     user = get_user_details(id)
     return JSONResponse({"id": user.id,"username": user.username, "email": user.email})
