@@ -44,6 +44,9 @@ AuthenticationMiddleware is used to authenticate requests in starlette. The Auth
 4. PyJWT - Library for JWT authentication in Python.
 # Project Structure
 This repository contains a project for demonstrating the authentication and authorization using Starlette.
+<div style="display:flex; justify-content:start">
+<img src="./file-structure.png">
+</div>
 ## Settings.py
 The Settings.py contains the global variables and the initialization of different variables used in our applicaion such as the SqlAlchemy engine and the declarative_base.
 ## Main.py
@@ -58,3 +61,9 @@ The controllers are the middwares or the intarface that handle the requests to o
 ## Running the server.
 As our starlette application uses uvicorn ASGI server, in order to run our application, we can run the following command in our terminal.
 > uvicorn main:app
+
+# Authentication routes.
+The **/user** route consists other routes nested for the login and registration.
+> The **/user/register** route accepts POST requests with username, email and password in the body for registering a new user into the database.
+
+> The **/user/login** route accepts POST requests with username and password in the body and returns a JWT token as a response if the credentials are matched.
