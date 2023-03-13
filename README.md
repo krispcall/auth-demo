@@ -44,9 +44,11 @@ AuthenticationMiddleware is used to authenticate requests in starlette. The Auth
 4. PyJWT - Library for JWT authentication in Python.
 # Project Structure
 This repository contains a project for demonstrating the authentication and authorization using Starlette.
+
 <div style="display:flex; justify-content:start">
 <img src="./file-structure.png">
 </div>
+
 ## Settings.py
 The Settings.py contains the global variables and the initialization of different variables used in our applicaion such as the SqlAlchemy engine and the declarative_base.
 ## Main.py
