@@ -35,3 +35,26 @@ Starlette provides a base "AuthenticationBackend" class from which we can extend
 
 ### AuthenticationMiddleware
 AuthenticationMiddleware is used to authenticate requests in starlette. The AuthenticationMiddle takes a list of AuthenticationBackends which are simply custom user authentication methods. The middleware runs all the AuthenticationBackends until each one of them successfylly authenticate the user. The AuthenticationMiddleware is provided as a parameter of the main Starlette app in the **main.py** file.
+
+
+# Tools and Technologies
+1. Starlette - ASGI python web framework.
+2. SQLAlchemy - Object Relational Mapper (ORM) used for creating user Schemas.
+3. Bcrypt - Password hashing library.
+4. PyJWT - Library for JWT authentication in Python.
+# Project Structure
+This repository contains a project for demonstrating the authentication and authorization using Starlette.
+## Settings.py
+The Settings.py contains the global variables and the initialization of different variables used in our applicaion such as the SqlAlchemy engine and the declarative_base.
+## Main.py
+The **main.py** file is the root file that is run in order to start our starlette server. This is where our routes, middlewares and the Starlette application's instrance is defined.
+## Models
+The models directory consists of the SQLAlchemy schema models in our application. It consists the User.py file which is a schema of our User model.
+## Routes
+Our application routes can be sub-divided into multiple nested routes for easier scalability.
+The routes directory contains files for each parent routes. For instance, the **user_routes.py** file contains the routes associated with user actions such as login and registration.
+## Controllers
+The controllers are the middwares or the intarface that handle the requests to our servers. Similar to the routes, the controllers are also divided into multiple files increasing scalability. 
+## Running the server.
+As our starlette application uses uvicorn ASGI server, in order to run our application, we can run the following command in our terminal.
+> uvicorn main:app
